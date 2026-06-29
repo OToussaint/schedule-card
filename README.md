@@ -3,7 +3,7 @@
 A visual and intuitive Home Assistant Lovelace card to display your
 `schedule` entities as a weekly calendar grid.
 
-![Card](https://github.com/OToussaint/schedule-card/raw/main/screenshots/card.png)
+![Card](https://github.com/OToussaint/schedule-card/raw/main/screenshots/card.png?cachebuster=123)
 
 ## Features
 
