@@ -621,14 +621,16 @@ class ScheduleCardEditor extends HTMLElement {
       title: this._config.title || "",
     };
 
-    this.shadowRoot.innerHTML = `<ha-form id="form"></ha-form>`;
-    this._form = this.shadowRoot.getElementById("form");
+    if (!this._form) {
+      this.shadowRoot.innerHTML = `<ha-form id="form"></ha-form>`;
+      this._form = this.shadowRoot.getElementById("form");
+      this._form.addEventListener("value-changed", (ev) => this._valueChanged(ev));
+    }
 
     this._form.hass = this._hass;
     this._form.data = formData;
     this._form.schema = SCHEMA;
-
-    this._form.addEventListener("value-changed", (ev) => this._valueChanged(ev));
+    
   }
 
   _valueChanged(ev) {
