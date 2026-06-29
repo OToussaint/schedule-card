@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+*.swp
+*.swo
+*~
+.vscode/
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
+
+# Synology debug logs
+synology-cointe*

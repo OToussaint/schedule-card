@@ -1,0 +1,10 @@
+{
+  "manifest_version": 1,
+  "domain": "schedule_card",
+  "name": "Schedule Card",
+  "codeowners": ["@OToussaint"],
+  "config_flow": false,
+  "documentation": "https://github.com/OToussaint/schedule-card",
+  "requirements": [],
+  "version": "0.1.0b0"
+}
