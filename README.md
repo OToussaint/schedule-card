@@ -77,21 +77,9 @@ entity: schedule.my_schedule
 
 -   **entity**: A Home Assistant `schedule` entity
 
-Example:
-
-``` yaml
-entity: schedule.work_hours
-```
-
 ### Optional
 
 -   **title**: Display a custom card title
-
-Example:
-
-``` yaml
-title: Office Schedule
-```
 
 ## Examples
 
@@ -109,22 +97,6 @@ type: custom:schedule-card
 entity: schedule.work_schedule
 title: Weekly Planning
 ```
-
-## How It Works
-
-The card reads the schedule data from your Home Assistant `schedule`
-entity and displays:
-
--   Days of the week as columns
--   Hours as rows
--   Active intervals as colored blocks
-
-Example:
-
-            MON   TUE   WED   THU   FRI
-    08:00   ███   ███
-    12:00
-    16:00         ███         ███
 
 ## Supported Entities
 
