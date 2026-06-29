@@ -1,4 +1,4 @@
-# Schedule Routine Card 📅
+# Schedule Card 📅
 
 A visual and intuitive Home Assistant Lovelace card to display your
 `schedule` entities as a weekly calendar grid.
@@ -34,7 +34,7 @@ A visual and intuitive Home Assistant Lovelace card to display your
 
 1.  Open **HACS** in Home Assistant
 2.  Go to **Frontend**
-3.  Search for **"Schedule Routine Card"**
+3.  Search for **"Schedule Card"**
 4.  Click **Install**
 5.  Reload your browser
 
@@ -62,7 +62,7 @@ resources:
 
 In Lovelace edit mode, search for:
 
-**Schedule Routine Card**
+**Schedule Card**
 
 or add manually:
 
