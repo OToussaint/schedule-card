@@ -665,7 +665,7 @@ customElements.define("schedule-card-editor", ScheduleCardEditor);
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "schedule-card",
-  name: "Schedule Routine Card",
+  name: "Schedule Card",
   preview: true,
   description: "Visualise Home Assistant schedules in a grid format.",
 });
