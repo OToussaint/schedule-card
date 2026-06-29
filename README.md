@@ -42,14 +42,12 @@ A visual and intuitive Home Assistant Lovelace card to display your
 
 ### Manual Installation
 
-1.  Copy the JavaScript file:
-
-```{=html}
-<!-- -->
-```
-    .homeassistant/www/schedule-card/
-    └── schedule-card.js
-
+1. Copy the entire `dist` folder content to your Home Assistant config folder:
+   ```
+   .homeassistant/www/schedue-card/
+   └── schedule-card.js
+   ```
+   
 2.  Add the resource in your Lovelace dashboard:
 
 ``` yaml
