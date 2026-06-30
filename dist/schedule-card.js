@@ -327,11 +327,11 @@ _calculateHourRange(days) {
                       const displayTo = interval.to.substring(0, 5);
 
                       return html`
-                        <div 
-                          class="event-block" 
-                          style="top: ${top}%; height: ${height}%;"
-                          @click="${() => this._showMoreInfo()}"
-                        >
+                          <div 
+                            class="event-block ${isCurrent && this.hass.states[this.config.entity]?.state !== 'off' ? 'current-event' : ''}" 
+                            style="top: ${top}%; height: ${height}%;" 
+                            @click="${() => this._showMoreInfo()}"
+                          >
                           <div class="event-text">${this._formatEventTime(interval.from)}&nbsp;-</div>
                           <div class="event-text">${this._formatEventTime(interval.to)}</div>
                         </div>
@@ -370,7 +370,7 @@ _calculateHourRange(days) {
           var(--primary-background-color, var(--card-background-color, #ffffff))
         );
         
-        /* 10% more background (70% primary, 30% background) on normal days */
+        /* 30% more background (70% primary, 30% background) on normal days */
         --event-color: color-mix(
           in srgb,
           var(--primary-color, #3b82f6) 70%,
@@ -630,7 +630,7 @@ class ScheduleCardEditor extends HTMLElement {
     this._form.hass = this._hass;
     this._form.data = formData;
     this._form.schema = SCHEMA;
-    
+
   }
 
   _valueChanged(ev) {
