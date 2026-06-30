@@ -539,10 +539,10 @@ _calculateHourRange(days) {
       }
       
       /* Style specific to the current day column event blocks */
-      .current-day-column .event-block {
+      .current-day-column .event-block.current-event {
         background-color: var(--current-event-color);
       }
-      
+        
       .event-text {
         white-space: nowrap;
         text-overflow: ellipsis;
