@@ -361,24 +361,27 @@ _calculateHourRange(days) {
         /* Dynamic theme colors using CSS color-mix */
         --highlight-bg: color-mix(
           in srgb, 
-          var(--accent-color, #3b82f6) 10%, 
+          var(--accent-color, #ff9800) 10%, 
           var(--primary-background-color, var(--card-background-color, #ffffff))
         );
+
         --highlight-header-bg: color-mix(
           in srgb, 
-          var(--accent-color, #3b82f6) 20%, 
+          var(--accent-color, #ff9800) 20%, 
           var(--primary-background-color, var(--card-background-color, #ffffff))
         );
         
-        /* 30% more background (70% primary, 30% background) on normal days */
-        --event-color: color-mix(
-          in srgb,
-          var(--primary-color, #3b82f6) 70%,
-          var(--primary-background-color, var(--card-background-color, #ffffff)) 30%
-        );
-        
-        /* 100% primary-color on the current day */
-        --current-event-color: var(--accent-color, #3b82f6);
+        // /* 30% more background (70% primary, 30% background) on normal days */
+        // --event-color: color-mix(
+        //   in srgb,
+        //   var(--primary-color, #009ac7) 70%,
+        //   var(--primary-background-color, var(--card-background-color, #ffffff)) 30%
+        // );
+
+        --event-color: var(--primary-color, #009ac7);
+
+        /* 100% accent-color on the current day */
+        --current-event-color: var(--accent-color, #ff9800);
       }
 
       .card-title {
@@ -542,7 +545,7 @@ _calculateHourRange(days) {
       .current-day-column .event-block.current-event {
         background-color: var(--current-event-color);
       }
-        
+
       .event-text {
         white-space: nowrap;
         text-overflow: ellipsis;
