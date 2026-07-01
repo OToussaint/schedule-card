@@ -73,21 +73,17 @@ entity: schedule.my_schedule
 
 ## Configuration
 
-### Required
-
 **entity**: <span style="color: #8792a2; text-transform: lowercase;">string</span> <span style="color: #e56f4a; text-transform: uppercase; font-size: 12px;">Required</span>  
 A Home Assistant `schedule` entity
 
-### Optional
-
- **title**: <span style="color: #8792a2; text-transform: lowercase;">string (Optional)</span>  
- Display a custom card title
+**title**: <span style="color: #8792a2; text-transform: lowercase;">string (Optional)</span>  
+Display a custom card title
    
- **show_current_time**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
- Set to `false` to **hide** the live current time indicator (red line with dot).
+**show_current_time**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
+Set to `false` to **hide** the live current time indicator (red line with dot).
 
- **state_color**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
- Set to `false` to **disable** block coloring when entity is active.
+**state_color**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
+Set to `false` to **disable** block coloring when entity is active.
 
 ## Examples
 
