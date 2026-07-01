@@ -258,6 +258,7 @@ _calculateHourRange(days) {
     const showTimeLineInRange = currentHourDec >= startHour && currentHourDec < endHour;
     const showTimeLineEnabled = this.config && (this.config.show_current_time === undefined ? true : Boolean(this.config.show_current_time));
     const showTimeLine = showTimeLineInRange && showTimeLineEnabled;
+    const highlightActive = this.config && (this.config.highlight_active_block === undefined ? true : Boolean(this.config.highlight_active_block));
     const timeLineTopPercent = showTimeLine ? ((currentHourDec - startHour) / (endHour - startHour)) * 100 : 0;
 
     return html`
@@ -330,7 +331,7 @@ _calculateHourRange(days) {
 
                       return html`
                           <div 
-                            class="event-block ${isCurrent && this.hass.states[this.config.entity]?.state !== 'off' ? 'current-event' : ''}" 
+                            class="event-block ${isCurrent && this.hass.states[this.config.entity]?.state !== 'off' && highlightActive ? 'current-event' : ''}" 
                             style="top: ${top}%; height: ${height}%;" 
                             @click="${() => this._showMoreInfo()}"
                           >
@@ -625,12 +626,19 @@ class ScheduleCardEditor extends HTMLElement {
           boolean: {},
         },
       },
+      {
+        name: "highlight_active_block",
+        selector: {
+          boolean: {},
+        },
+      },
     ];
 
     const formData = {
       entity: this._config.entity || "",
       title: this._config.title || "",
       show_current_time: this._config.show_current_time === undefined ? true : this._config.show_current_time,
+      highlight_active_block: this._config.highlight_active_block === undefined ? true : this._config.highlight_active_block,
     };
 
     if (!this._form) {
@@ -662,6 +670,10 @@ class ScheduleCardEditor extends HTMLElement {
     /* Only include show_current_time when user disables it (default is true) */
     if (formData.show_current_time === false) {
       config.show_current_time = false;
+    }
+    /* Only include highlight_active_block when user disables it (default is true) */
+    if (formData.highlight_active_block === false) {
+      config.highlight_active_block = false;
     }
 
     /* Dispatch custom event so Lovelace knows to save new config */
