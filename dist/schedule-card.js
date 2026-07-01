@@ -255,7 +255,9 @@ _calculateHourRange(days) {
 
     // Calculate current time line position
     const currentHourDec = this._currentTime.getHours() + this._currentTime.getMinutes() / 60;
-    const showTimeLine = currentHourDec >= startHour && currentHourDec < endHour;
+    const showTimeLineInRange = currentHourDec >= startHour && currentHourDec < endHour;
+    const showTimeLineEnabled = this.config && (this.config.show_current_time === undefined ? true : Boolean(this.config.show_current_time));
+    const showTimeLine = showTimeLineInRange && showTimeLineEnabled;
     const timeLineTopPercent = showTimeLine ? ((currentHourDec - startHour) / (endHour - startHour)) * 100 : 0;
 
     return html`
@@ -617,11 +619,18 @@ class ScheduleCardEditor extends HTMLElement {
           text: {},
         },
       },
+      {
+        name: "show_current_time",
+        selector: {
+          boolean: {},
+        },
+      },
     ];
 
     const formData = {
       entity: this._config.entity || "",
       title: this._config.title || "",
+      show_current_time: this._config.show_current_time === undefined ? true : this._config.show_current_time,
     };
 
     if (!this._form) {
@@ -641,14 +650,18 @@ class ScheduleCardEditor extends HTMLElement {
 
     /* Build config object to send back to Lovelace */
     const config = {
-      type: this._config.type || "custom:schedule-card",  // Card type identifier
-
+      type: this._config.type || "custom:schedule-card",
       entity: formData.entity,
     };
 
     /* Only include title in config if user entered one (cleaner YAML) */
     if (formData.title && formData.title !== '') {
       config.title = formData.title;
+    }
+
+    /* Only include show_current_time when user disables it (default is true) */
+    if (formData.show_current_time === false) {
+      config.show_current_time = false;
     }
 
     /* Dispatch custom event so Lovelace knows to save new config */
