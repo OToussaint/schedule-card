@@ -75,15 +75,19 @@ entity: schedule.my_schedule
 
 ### Required
 
--   **entity**: A Home Assistant `schedule` entity
+**entity**: <span style="color: #8792a2; text-transform: lowercase;">string</span> <span style="color: #e56f4a; text-transform: uppercase; font-size: 12px;">Required</span>  
+A Home Assistant `schedule` entity
 
 ### Optional
 
--   **title**: Display a custom card title
-    
--   **show_current_time**: Show the live current time indicator (red line with dot). Defaults to `true`. If you set this to `false`, the current time indicator will not be rendered. The option is omitted from YAML when left at the default `true` to keep configuration concise.
+ **title**: <span style="color: #8792a2; text-transform: lowercase;">string (Optional)</span>  
+ Display a custom card title
+   
+ **show_current_time**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
+ Set to `false` to **hide** the live current time indicator (red line with dot).
 
--   **highlight_active_block**: When `true` (default), the active schedule block for the current day is highlighted using the theme `accent-color`. When set to `false`, active blocks use the same `primary-color` as other blocks. Like `show_current_time`, this key is only needed in your YAML when you explicitly set it to `false`.
+ **state_color**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
+ Set to `false` to **disable** block coloring when entity is active.
 
 ## Examples
 
@@ -112,12 +116,12 @@ entity: schedule.house_routine
 show_current_time: false
 ```
 
-Disable only the active-block highlighting:
+Disable only the active-block highlighting (disable state color):
 
 ``` yaml
 type: custom:schedule-card
 entity: schedule.house_routine
-highlight_active_block: false
+state_color: false
 ```
 
 Disable both options:
@@ -126,7 +130,7 @@ Disable both options:
 type: custom:schedule-card
 entity: schedule.house_routine
 show_current_time: false
-highlight_active_block: false
+state_color: false
 ```
 
 ## Supported Entities

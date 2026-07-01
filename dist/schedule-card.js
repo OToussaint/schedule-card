@@ -258,7 +258,7 @@ _calculateHourRange(days) {
     const showTimeLineInRange = currentHourDec >= startHour && currentHourDec < endHour;
     const showTimeLineEnabled = this.config && (this.config.show_current_time === undefined ? true : Boolean(this.config.show_current_time));
     const showTimeLine = showTimeLineInRange && showTimeLineEnabled;
-    const highlightActive = this.config && (this.config.highlight_active_block === undefined ? true : Boolean(this.config.highlight_active_block));
+    const stateColor = this.config && (this.config.state_color === undefined ? true : Boolean(this.config.state_color));
     const timeLineTopPercent = showTimeLine ? ((currentHourDec - startHour) / (endHour - startHour)) * 100 : 0;
 
     return html`
@@ -331,7 +331,7 @@ _calculateHourRange(days) {
 
                       return html`
                           <div 
-                            class="event-block ${isCurrent && this.hass.states[this.config.entity]?.state !== 'off' && highlightActive ? 'current-event' : ''}" 
+                            class="event-block ${isCurrent && this.hass.states[this.config.entity]?.state !== 'off' && stateColor ? 'current-event' : ''}" 
                             style="top: ${top}%; height: ${height}%;" 
                             @click="${() => this._showMoreInfo()}"
                           >
@@ -604,6 +604,14 @@ class ScheduleCardEditor extends HTMLElement {
   _render() {
     if (!this._config) return;
 
+    const translate = (key, fallback) => {
+      try {
+        return this._hass && this._hass.localize ? (this._hass.localize(key) || fallback) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    };
+
     const SCHEMA = [
       {
         name: "entity",
@@ -622,12 +630,14 @@ class ScheduleCardEditor extends HTMLElement {
       },
       {
         name: "show_current_time",
+        label: translate("ui.panel.config.automation.trace.tabs.timeline", "Trace timeline"),
         selector: {
           boolean: {},
         },
       },
       {
-        name: "highlight_active_block",
+        name: "state_color",
+        label: translate("ui.panel.lovelace.editor.card.generic.state_color", "Show state color"),
         selector: {
           boolean: {},
         },
@@ -638,7 +648,7 @@ class ScheduleCardEditor extends HTMLElement {
       entity: this._config.entity || "",
       title: this._config.title || "",
       show_current_time: this._config.show_current_time === undefined ? true : this._config.show_current_time,
-      highlight_active_block: this._config.highlight_active_block === undefined ? true : this._config.highlight_active_block,
+      state_color: this._config.state_color === undefined ? true : this._config.state_color,
     };
 
     if (!this._form) {
@@ -671,9 +681,9 @@ class ScheduleCardEditor extends HTMLElement {
     if (formData.show_current_time === false) {
       config.show_current_time = false;
     }
-    /* Only include highlight_active_block when user disables it (default is true) */
-    if (formData.highlight_active_block === false) {
-      config.highlight_active_block = false;
+    /* Only include state_color when user disables it (default is true) */
+    if (formData.state_color === false) {
+      config.state_color = false;
     }
 
     /* Dispatch custom event so Lovelace knows to save new config */
