@@ -48,7 +48,7 @@ async function loadTranslations(lang) {
     }
     const data = await response.json();
     console.log('[loadTranslations] Data loaded for', langFile + ':', data);
-    const result = data.schedulte_card || {};
+    const result = data.schedule_card || {};
     console.log('[loadTranslations] Returning schedule_card object:', result);
     return result;
   } catch (error) {
