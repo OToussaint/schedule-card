@@ -1,0 +1,8 @@
+{
+  "schedule_card": {
+    "entity": "Entité",
+    "title": "Titre",
+    "show_current_time": "Afficher l'heure actuelle",
+    "state_color": "Afficher la couleur de l'état"
+  }
+}

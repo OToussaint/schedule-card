@@ -4,6 +4,60 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
+/**
+ * Get the base URL for loading component resources (translations, etc.)
+ * Works with both development (relative paths) and HACS deployment
+ */
+function getComponentBaseUrl() {
+  // Try to find the script URL from document's scripts
+  const scripts = document.querySelectorAll('script');
+  for (const script of scripts) {
+    if (script.src && (script.src.includes('schedule-card.js') || script.src.includes('schedule-card'))) {
+      // Extract directory from script URL
+      const url = new URL(script.src, window.location.href);
+      return url.pathname.substring(0, url.pathname.lastIndexOf('/'));
+    }
+  }
+  // Fallback: assume standard HACS path
+  return '/hacsfiles/shutter-new';
+}
+
+/**
+ * Shared translation loader utility
+ * Loads translations from local JSON files based on language code
+ * Returns promise that resolves to translations object
+ */
+async function loadTranslations(lang) {
+  try {
+    console.log('[loadTranslations] Starting for lang:', lang);
+    // Map language code to file (e.g., 'en-GB' -> 'en.json')
+    const langFile = lang.split('-')[0].toLowerCase();
+    const baseUrl = getComponentBaseUrl();
+    const filePath = `${baseUrl}/translations/${langFile}.json`;
+    console.log('[loadTranslations] Fetching from:', filePath);
+    
+    const response = await fetch(filePath);
+    if (!response.ok) {
+      console.warn('[loadTranslations] Response not ok, falling back to English');
+      // Fall back to English if requested language not found
+      const fallbackPath = `${baseUrl}/translations/en.json`;
+      const fallbackResponse = await fetch(fallbackPath);
+      if (!fallbackResponse.ok) throw new Error('Failed to load translations');
+      const data = await fallbackResponse.json();
+      console.log('[loadTranslations] Fallback data loaded:', data);
+      return data.shutter_new || {};
+    }
+    const data = await response.json();
+    console.log('[loadTranslations] Data loaded for', langFile + ':', data);
+    const result = data.shutter_new || {};
+    console.log('[loadTranslations] Returning shutter_new object:', result);
+    return result;
+  } catch (error) {
+    console.error('[loadTranslations] Error:', error);
+    return {}; // Empty object as last resort
+  }
+}
+
 class ScheduleCard extends LitElement {
   static get properties() {
     return {
@@ -587,34 +641,72 @@ class ScheduleCardEditor extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    // Translations storage and loading state
+    this._translations = {};
+    this._translationsLoaded = false;
+    // Load translations immediately from browser language
+    this._initTranslations();
   }
 
+  /**
+   * Initialize translations from browser language or HA language later
+   */
+  _initTranslations() {
+    // Try to get language from browser
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    loadTranslations(browserLang).then(translations => {
+      this._translations = translations;
+      this._translationsLoaded = true;
+      // If config already set, re-render with new translations
+      if (this._config) {
+        this._render();
+      }
+    }).catch(err => {
+      console.error('[ScheduleCardEditor._initTranslations] Error loading translations:', err);
+    });
+  }
+
+  /**
+   * HA updates: Pass hass context to the form element for service calls
+   * and localization
+   */
   set hass(hass) {
+    // If translations still not loaded, load with HA language
+    if (!this._translations || !this._translations['open']) {
+      const haLang = hass.language || 'en';
+      loadTranslations(haLang).then(translations => {
+        this._translations = translations;
+        this._translationsLoaded = true;
+        // Update form labels after translations load
+        if (this._form) {
+          this._form.computeLabel = this._computeLabel.bind(this);
+          this._form.hass = hass;
+        }
+      });
+      this._hass = hass;
+      return;
+    }
+    
     this._hass = hass;
+    /* Propagate hass to form if already created */
     if (this._form) {
       this._form.hass = hass;
     }
   }
 
-  setConfig(config) {
-    this._config = config;
-    this._render();
-  }
-
   _render() {
     if (!this._config) return;
 
-    const translate = (key, fallback) => {
-      try {
-        return this._hass && this._hass.localize ? (this._hass.localize(key) || fallback) : fallback;
-      } catch (e) {
-        return fallback;
-      }
-    };
+    /* Get translated labels for form fields (from local translation files) */
+    const labelEntity = this._localize('entity', 'Entity');
+    const labelTitle = this._localize('title', 'Title');
+    const labelTime = this._localize('show_current_time', 'Show current time');
+    const labelState = this._localize('state_color', 'Show state color');
 
     const SCHEMA = [
       {
         name: "entity",
+        label: labelEntity,
         required: true,
         selector: {
           entity: {
@@ -624,20 +716,21 @@ class ScheduleCardEditor extends HTMLElement {
       },
       {
         name: "title",
+        label: labelTitle,
         selector: {
           text: {},
         },
       },
       {
         name: "show_current_time",
-        label: translate("ui.panel.config.automation.trace.tabs.timeline", "Trace timeline"),
+        label: labelTime,
         selector: {
           boolean: {},
         },
       },
       {
         name: "state_color",
-        label: translate("ui.panel.lovelace.editor.card.generic.state_color", "Show state color"),
+        label: labelState,
         selector: {
           boolean: {},
         },
@@ -660,7 +753,46 @@ class ScheduleCardEditor extends HTMLElement {
     this._form.hass = this._hass;
     this._form.data = formData;
     this._form.schema = SCHEMA;
+    this._form.computeLabel = this._computeLabel.bind(this);       // Custom labels
+  }
 
+  /**
+   * Utility: Get translated text from local translation files
+   * Falls back to English version if translation key not found
+   * Format: key should be like 'open', 'close', 'stop', etc.
+   */
+  _localize(key, fallback = '') {
+    // Return from local translations if available
+    if (this._translations && this._translations[key]) {
+      return this._translations[key];
+    }
+    // Fallback to English string if translation not found
+    return fallback || key;
+  }
+
+  /**
+   * Custom field labels for the form
+   * Maps schema field names to user-friendly labels
+   */
+  _computeLabel(schema) {
+    /* Get translated labels from local translation files */
+    const entityLabel = this._localize('entity', 'Entity');
+    const titleLabel = this._localize('title', 'Title');
+    const timeLabel = this._localize('show_current_time', 'Show current time');
+    const stateColorLabel = this._localize('state_color', 'Show state color');
+
+    /* Define human-friendly labels for each field */
+    const labels = {
+      entity: entityLabel,
+
+      title: `${titleLabel} (Optional)`,
+
+      show_current_time: `${timeLabel} (Optional)`,
+
+      state_color: `${stateColorLabel} (Optional)`
+    };
+
+    return labels[schema.name] || "";  // Return label or empty string
   }
 
   _valueChanged(ev) {
