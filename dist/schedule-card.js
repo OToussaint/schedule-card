@@ -806,11 +806,11 @@ class ScheduleCardEditor extends HTMLElement {
     const labels = {
       entity: entityLabel,
 
-      title: `${titleLabel} (Optional)`,
+      title: `${titleLabel}`,
 
-      show_current_time: `${timeLabel} (Optional)`,
+      show_current_time: `${timeLabel}`,
 
-      state_color: `${stateColorLabel} (Optional)`
+      state_color: `${stateColorLabel}`
     };
 
     return labels[schema.name] || "";  // Return label or empty string
