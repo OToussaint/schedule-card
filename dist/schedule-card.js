@@ -698,12 +698,20 @@ class ScheduleCardEditor extends HTMLElement {
    * Triggers render to display form with current values
    */
   setConfig(config) {
+    console.log('[ScheduleCardEditor.setConfig] config:', config);
     this._config = config;
-    this._render();
+    try {
+      this._render();
+    } catch (err) {
+      console.error('[ScheduleCardEditor.setConfig] _render threw:', err);
+      this.shadowRoot.innerHTML = `<ha-card class="error-card"><strong>Editor Error:</strong> ${err && err.message ? err.message : String(err)}</ha-card>`;
+    }
   }
 
   _render() {
-    if (!this._config) return;
+    console.log('[ScheduleCardEditor._render] start');
+    try {
+      if (!this._config) return;
 
     /* Get translated labels for form fields (from local translation files) */
     const labelEntity = this._localize('entity', 'Entity');
@@ -755,13 +763,18 @@ class ScheduleCardEditor extends HTMLElement {
     if (!this._form) {
       this.shadowRoot.innerHTML = `<ha-form id="form"></ha-form>`;
       this._form = this.shadowRoot.getElementById("form");
-      this._form.addEventListener("value-changed", (ev) => this._valueChanged(ev));
+      if (this._form) this._form.addEventListener("value-changed", (ev) => this._valueChanged(ev));
     }
 
     this._form.hass = this._hass;
     this._form.data = formData;
     this._form.schema = SCHEMA;
     this._form.computeLabel = this._computeLabel.bind(this);       // Custom labels
+    console.log('[ScheduleCardEditor._render] form rendered, schema:', SCHEMA);
+    } catch (err) {
+      console.error('[ScheduleCardEditor._render] Error:', err);
+      this.shadowRoot.innerHTML = `<ha-card class="error-card"><strong>Editor Error:</strong> ${err && err.message ? err.message : String(err)}</ha-card>`;
+    }
   }
 
   /**
