@@ -45,7 +45,11 @@ A visual and intuitive Home Assistant Lovelace card to display your
 1. Copy the entire `dist` folder content to your Home Assistant config folder:
    ```
    .homeassistant/www/schedue-card/
-   └── schedule-card.js
+   ├── schedule-card.js
+   └── translations/
+       ├── en.json
+       ├── fr.json
+       └── ...
    ```
    
 2.  Add the resource in your Lovelace dashboard:
