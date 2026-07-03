@@ -670,8 +670,8 @@ class ScheduleCardEditor extends HTMLElement {
    * and localization
    */
   set hass(hass) {
-    // If translations still not loaded, load with HA language
-    if (!this._translations || !this._translations['open']) {
+    // If translations still not loaded (check a known key like 'entity'), load with HA language
+    if (!this._translations || !this._translations['entity']) {
       const haLang = hass.language || 'en';
       loadTranslations(haLang).then(translations => {
         this._translations = translations;
