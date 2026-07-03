@@ -19,7 +19,7 @@ function getComponentBaseUrl() {
     }
   }
   // Fallback: assume standard HACS path
-  return '/hacsfiles/shutter-new';
+  return '/hacsfiles/schedule-card';
 }
 
 /**
@@ -44,13 +44,12 @@ async function loadTranslations(lang) {
       const fallbackResponse = await fetch(fallbackPath);
       if (!fallbackResponse.ok) throw new Error('Failed to load translations');
       const data = await fallbackResponse.json();
-      console.log('[loadTranslations] Fallback data loaded:', data);
-      return data.shutter_new || {};
+      return data.schedule_card || {};
     }
     const data = await response.json();
     console.log('[loadTranslations] Data loaded for', langFile + ':', data);
-    const result = data.shutter_new || {};
-    console.log('[loadTranslations] Returning shutter_new object:', result);
+    const result = data.schedulte_card || {};
+    console.log('[loadTranslations] Returning schedule_card object:', result);
     return result;
   } catch (error) {
     console.error('[loadTranslations] Error:', error);
