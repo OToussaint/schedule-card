@@ -693,6 +693,15 @@ class ScheduleCardEditor extends HTMLElement {
     }
   }
 
+  /**
+   * Lovelace callback: receives current card config
+   * Triggers render to display form with current values
+   */
+  setConfig(config) {
+    this._config = config;
+    this._render();
+  }
+
   _render() {
     if (!this._config) return;
 
