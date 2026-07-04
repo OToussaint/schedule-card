@@ -265,6 +265,14 @@ _calculateHourRange(days) {
       maxHour = Math.ceil(absoluteMax);
     }
 
+    // Allow explicit override of the start hour via config.start_time (0-23)
+    if (this.config && this.config.start_time !== undefined && this.config.start_time !== null) {
+      const cfgStart = Number(this.config.start_time);
+      if (!Number.isNaN(cfgStart)) {
+        minHour = Math.max(0, Math.min(23, Math.floor(cfgStart)));
+      }
+    }
+
     minHour = Math.max(0, minHour);
     maxHour = Math.min(24, maxHour);
 
@@ -728,6 +736,7 @@ class ScheduleCardEditor extends HTMLElement {
     const labelTime = this._localize('show_current_time', 'Show current time');
     const labelState = this._localize('state_color', 'Show state color');
     const labelHeaderPosition = this._localize('row_header', 'Row header position');
+    const labelStartTime = this._localize('start_time', 'Start hour');
     const labelTop = this._localize('top', 'Top');
     const labelMiddle = this._localize('middle', 'Middle');
 
@@ -764,6 +773,18 @@ class ScheduleCardEditor extends HTMLElement {
       },
 
       {
+        name: "start_time",
+        label: labelStartTime,
+        selector: {
+          number: {
+            min: 0,
+            max: 23,
+            step: 1
+          }
+        }
+      },
+
+      {
         name: "show_current_time",
         label: labelTime,
         selector: {
@@ -784,6 +805,7 @@ class ScheduleCardEditor extends HTMLElement {
       entity: this._config.entity || "",
       title: this._config.title || "",
       row_header: this._config.row_header || "top",
+      start_time: this._config.start_time !== undefined ? this._config.start_time : null,
       show_current_time: this._config.show_current_time === undefined ? true : this._config.show_current_time,
       state_color: this._config.state_color === undefined ? true : this._config.state_color,
     };
@@ -863,6 +885,10 @@ class ScheduleCardEditor extends HTMLElement {
     /* Only include row_header if user changed it from default (top) */
     if (formData.row_header && formData.row_header !== 'top') {
       config.row_header = formData.row_header;
+    }
+    /* Only include start_time if user set it (0-23) */
+    if (formData.start_time !== undefined && formData.start_time !== null && formData.start_time !== '') {
+      config.start_time = Number(formData.start_time);
     }
     /* Only include show_current_time when user disables it (default is true) */
     if (formData.show_current_time === false) {

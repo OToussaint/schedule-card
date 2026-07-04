@@ -6,6 +6,7 @@
     "state_color": "Show state color",
     "row_header": "Row header position",
     "top": "Top",
-    "middle": "Middle"
+    "middle": "Middle",
+    "start_time": "Start time (0-23)"
   }
 }

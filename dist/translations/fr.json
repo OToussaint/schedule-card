@@ -6,6 +6,7 @@
     "state_color": "Afficher la couleur de l'état",
     "row_header": "Position de l'en-tête de ligne",
     "top": "En haut",
-    "middle": "Au milieu"
+    "middle": "Au milieu",
+    "start_time": "Heure de début (0-23)"
   }
 }
