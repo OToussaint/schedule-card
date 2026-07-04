@@ -813,7 +813,16 @@ class ScheduleCardEditor extends HTMLElement {
     };
 
     if (!this._form) {
-      this.shadowRoot.innerHTML = `<ha-form id="form"></ha-form>`;
+      this.shadowRoot.innerHTML = `
+        <style>
+          :host { display: block; padding: 12px; box-sizing: border-box; }
+          #form-wrapper { width: 100%; box-sizing: border-box; overflow: visible; }
+          ha-form { display: block; width: 100%; box-sizing: border-box; overflow: visible; }
+          /* Ensure selectors and native inputs are not clipped by parent containers */
+          ha-form * { overflow: visible !important; box-sizing: border-box; }
+        </style>
+        <div id="form-wrapper"><ha-form id="form"></ha-form></div>
+      `;
       this._form = this.shadowRoot.getElementById("form");
       if (this._form) this._form.addEventListener("value-changed", (ev) => this._valueChanged(ev));
     }
