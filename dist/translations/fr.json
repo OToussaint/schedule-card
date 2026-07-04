@@ -7,6 +7,6 @@
     "row_header": "Position de l'en-tête de ligne",
     "top": "En haut",
     "middle": "Au milieu",
-    "start_time": "Heure de début (0-23)"
+    "start_time": "Heure de début (0-23, laissez vide pour automatique)"
   }
 }

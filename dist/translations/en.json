@@ -7,6 +7,6 @@
     "row_header": "Row header position",
     "top": "Top",
     "middle": "Middle",
-    "start_time": "Start time (0-23)"
+    "start_time": "Start time (0-23, leave it empty for automatic)"
   }
 }

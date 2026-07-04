@@ -94,6 +94,9 @@ Choose how hour labels are positioned in the left column. Possible values:
  - `top` the hour label is aligned with the dashed grid line.
  - `middle` the hour label is centered between two dashed grid lines (middle of the cell). When `middle` is selected, the first and last visible hours are also shown.
 
+**start_time**: <span style="color: #8792a2; text-transform: lowercase;">integer (Optional)</span>  
+Override the automatically computed start hour for the visible timeline. Accepts an integer between `0` and `23`. Leave empty to let the card automatically determine the start hour based on your schedules.
+
 ## Examples
 
 ### Basic setup
@@ -103,7 +106,9 @@ type: custom:schedule-card
 entity: schedule.house_routine
 ```
 
-### With title
+### Options examples
+
+Define a title:
 
 ``` yaml
 type: custom:schedule-card
@@ -111,7 +116,7 @@ entity: schedule.work_schedule
 title: Weekly Planning
 ```
 
-### With row header in the middle of the cell
+Display header in the middle of the cell:
 
 ``` yaml
 type: custom:schedule-card
@@ -119,9 +124,7 @@ entity: schedule.house_routine
 row_header: middle
 ```
 
-### Options examples
-
-Disable only the current time indicator:
+Disable the current time indicator:
 
 ``` yaml
 type: custom:schedule-card
@@ -129,7 +132,7 @@ entity: schedule.house_routine
 show_current_time: false
 ```
 
-Disable only the active-block highlighting (disable state color):
+Disable the active-block highlighting:
 
 ``` yaml
 type: custom:schedule-card
@@ -137,13 +140,12 @@ entity: schedule.house_routine
 state_color: false
 ```
 
-Disable both options:
+Define start time:
 
 ``` yaml
 type: custom:schedule-card
 entity: schedule.house_routine
-show_current_time: false
-state_color: false
+start_time: 7
 ```
 
 ## Supported Entities
