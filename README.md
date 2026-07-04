@@ -89,6 +89,11 @@ Set to `false` to **hide** the live current time indicator (red line with dot).
 **state_color**: <span style="color: #8792a2; text-transform: lowercase;">boolean (Optional, default: true)</span>  
 Set to `false` to **disable** block coloring when entity is active.
 
+**row_header**: <span style="color: #8792a2; text-transform: lowercase;">string (Optional, default: top)</span>  
+Choose how hour labels are positioned in the left column. Possible values:
+ - `top` the hour label is aligned with the dashed grid line.
+ - `middle` the hour label is centered between two dashed grid lines (middle of the cell). When `middle` is selected, the first and last visible hours are also shown.
+
 ## Examples
 
 ### Basic setup
@@ -104,6 +109,14 @@ entity: schedule.house_routine
 type: custom:schedule-card
 entity: schedule.work_schedule
 title: Weekly Planning
+```
+
+### With row header in the middle of the cell
+
+``` yaml
+type: custom:schedule-card
+entity: schedule.house_routine
+row_header: middle
 ```
 
 ### Options examples
@@ -163,6 +176,36 @@ This card supports Home Assistant schedule entities
 -   Combine with automations based on the same schedule entity
 -   Use dashboard sections to create clean weekly planning views
 -   Let the visual editor generate your YAML automatically
+
+## Customization / Theming
+
+Users can override the card CSS variables (colors, sizes) using `card_mod`.
+
+Common CSS variables you can target:
+
+- `--time-indicator-color` — color of the current time line and dot
+- `--grid-line-color` — color of the dashed grid lines
+- `--grid-border-color` — border color around the grid
+- `--event-color` — background color for event blocks
+- `--current-event-color` — background color for active/current events
+- `--highlight-bg` — background for the current day column
+- `--highlight-header-bg` — background for the day header of the current day
+- `--time-column-width` — width of the left time column
+
+Example `card_mod` usage:
+
+```yaml
+type: custom:schedule-card
+entity: schedule.house_routine
+card_mod:
+    style: |
+        ha-card {
+            --time-indicator-color: #1e88e5;
+            --grid-line-color: rgba(30,136,229,0.06);
+            --event-color: #4caf50;
+            --current-event-color: #ff5722;
+        }
+```
 
 ## Support
 

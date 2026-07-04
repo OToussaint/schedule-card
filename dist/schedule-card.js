@@ -313,6 +313,7 @@ _calculateHourRange(days) {
     const showTimeLine = showTimeLineInRange && showTimeLineEnabled;
     const stateColor = this.config && (this.config.state_color === undefined ? true : Boolean(this.config.state_color));
     const timeLineTopPercent = showTimeLine ? ((currentHourDec - startHour) / (endHour - startHour)) * 100 : 0;
+    const headerMode = this.config && this.config.row_header ? this.config.row_header : 'top';
 
     return html`
       <ha-card>
@@ -332,16 +333,24 @@ _calculateHourRange(days) {
           <!-- Main Grid Structure -->
           <div class="grid-body">
             
-            <!-- Left hours column (Skipping the very first limit at 0% top) -->
+            <!-- Left hours column -->
             <div class="time-column">
-              ${hours.map((h, index) => {
-                if (index === 0) return html``;
-                return html`
-                  <div class="time-cell" style="top: ${(index / hours.length) * 100}%;">
+              ${headerMode === 'top' ? html`
+                ${hours.map((h, index) => {
+                  if (index === 0) return html``;
+                  return html`
+                    <div class="time-cell" style="top: ${(index / hours.length) * 100}%;">
+                      <span>${this._formatHour(h)}</span>
+                    </div>
+                  `;
+                })}
+              ` : html`
+                ${hours.map((h, index) => html`
+                  <div class="time-cell" style="top: ${((index + 0.5) / hours.length) * 100}%;">
                     <span>${this._formatHour(h)}</span>
                   </div>
-                `;
-              })}
+                `)}
+              `}
             </div>
 
             <!-- Content columns for each day -->
@@ -718,6 +727,9 @@ class ScheduleCardEditor extends HTMLElement {
     const labelTitle = this._localize('title', 'Title');
     const labelTime = this._localize('show_current_time', 'Show current time');
     const labelState = this._localize('state_color', 'Show state color');
+    const labelHeaderPosition = this._localize('row_header', 'Row header position');
+    const labelTop = this._localize('top', 'Top');
+    const labelMiddle = this._localize('middle', 'Middle');
 
     const SCHEMA = [
       {
@@ -730,6 +742,7 @@ class ScheduleCardEditor extends HTMLElement {
           },
         },
       },
+
       {
         name: "title",
         label: labelTitle,
@@ -737,6 +750,19 @@ class ScheduleCardEditor extends HTMLElement {
           text: {},
         },
       },
+
+      {
+        name: "row_header",
+        selector: {
+          select: {
+            options: [
+              { value: "top", label: labelTop },
+              { value: "middle", label: labelMiddle }
+            ]
+          }
+        }
+      },
+
       {
         name: "show_current_time",
         label: labelTime,
@@ -744,18 +770,20 @@ class ScheduleCardEditor extends HTMLElement {
           boolean: {},
         },
       },
+
       {
         name: "state_color",
         label: labelState,
         selector: {
           boolean: {},
-        },
-      },
+        }
+      }
     ];
 
     const formData = {
       entity: this._config.entity || "",
       title: this._config.title || "",
+      row_header: this._config.row_header || "top",
       show_current_time: this._config.show_current_time === undefined ? true : this._config.show_current_time,
       state_color: this._config.state_color === undefined ? true : this._config.state_color,
     };
@@ -799,6 +827,7 @@ class ScheduleCardEditor extends HTMLElement {
     /* Get translated labels from local translation files */
     const entityLabel = this._localize('entity', 'Entity');
     const titleLabel = this._localize('title', 'Title');
+    const headerLabel = this._localize('row_header', 'Row header position');
     const timeLabel = this._localize('show_current_time', 'Show current time');
     const stateColorLabel = this._localize('state_color', 'Show state color');
 
@@ -807,6 +836,8 @@ class ScheduleCardEditor extends HTMLElement {
       entity: entityLabel,
 
       title: `${titleLabel}`,
+
+      row_header: `${headerLabel}`, 
 
       show_current_time: `${timeLabel}`,
 
@@ -829,7 +860,10 @@ class ScheduleCardEditor extends HTMLElement {
     if (formData.title && formData.title !== '') {
       config.title = formData.title;
     }
-
+    /* Only include row_header if user changed it from default (top) */
+    if (formData.row_header && formData.row_header !== 'top') {
+      config.row_header = formData.row_header;
+    }
     /* Only include show_current_time when user disables it (default is true) */
     if (formData.show_current_time === false) {
       config.show_current_time = false;

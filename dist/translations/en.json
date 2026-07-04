@@ -3,6 +3,9 @@
     "entity": "Entity",
     "title": "Title",
     "show_current_time": "Show current time",
-    "state_color": "Show state color"
+    "state_color": "Show state color",
+    "row_header": "Row header position",
+    "top": "Top",
+    "middle": "Middle"
   }
 }

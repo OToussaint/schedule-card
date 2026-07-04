@@ -3,6 +3,9 @@
     "entity": null,
     "title": null,
     "show_current_time": null,
-    "state_color": null
+    "state_color": null,
+    "row_header": null,
+    "top": null,
+    "middle": null
   }
 }

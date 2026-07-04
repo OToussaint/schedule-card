@@ -3,6 +3,9 @@
     "entity": "Entité",
     "title": "Titre",
     "show_current_time": "Afficher l'heure actuelle",
-    "state_color": "Afficher la couleur de l'état"
+    "state_color": "Afficher la couleur de l'état",
+    "row_header": "Position de l'en-tête de ligne",
+    "top": "En haut",
+    "middle": "Au milieu"
   }
 }
