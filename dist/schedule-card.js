@@ -864,6 +864,8 @@ class ScheduleCardEditor extends HTMLElement {
     const timeLabel = this._localize('show_current_time', 'Show current time');
     const stateColorLabel = this._localize('state_color', 'Show state color');
     const startTimeLabel = this._localize('start_time', 'Start hour');
+    const topLabel = this._localize('top', 'Top');
+    const middleLabel = this._localize('middle', 'Middle');
 
     /* Define human-friendly labels for each field */
     const labels = {
@@ -877,7 +879,11 @@ class ScheduleCardEditor extends HTMLElement {
 
       state_color: `${stateColorLabel}`,
 
-      start_time: `${startTimeLabel}`
+      start_time: `${startTimeLabel}`,
+
+      top: `${topLabel}`,
+
+      middle: `${middleLabel}`,
     };
 
     return labels[schema.name] || "";  // Return label or empty string
