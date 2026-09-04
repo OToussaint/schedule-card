@@ -399,9 +399,12 @@ _calculateHourRange(days) {
                       const displayFrom = interval.from.substring(0, 5);
                       const displayTo = interval.to.substring(0, 5);
 
+                      // Check if this specific event block is currently active
+                      const isCurrentEvent = isCurrent && currentHourDec >= startDec && currentHourDec < endDec && this.hass.states[this.config.entity]?.state !== 'off' && stateColor;
+
                       return html`
                           <div 
-                            class="event-block ${isCurrent && this.hass.states[this.config.entity]?.state !== 'off' && stateColor ? 'current-event' : ''}" 
+                            class="event-block ${isCurrentEvent ? 'current-event' : ''}" 
                             style="top: ${top}%; height: ${height}%;" 
                             @click="${() => this._showMoreInfo()}"
                           >
@@ -409,6 +412,7 @@ _calculateHourRange(days) {
                           <div class="event-text">${this._formatEventTime(interval.to)}</div>
                         </div>
                       `;
+
                     })}
                   </div>
                 `;
